@@ -13,6 +13,7 @@ files=(
     ./src/vars.js
     ./src/util.js
     ./src/room.js
+    ./src/controls.js
     ./src/sprites.js
     ./src/main.js
 )

@@ -14,6 +14,10 @@ let createRoom = () => {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
         map[randPos.y * size + randPos.x] = rand(MOB0, MOB3);
+        mobs[randPos.y * size + randPos.x] = {
+            h: 10,
+            k: 0
+        }
     }
 
     let door1y = rand(1, 7);
@@ -23,6 +27,8 @@ let createRoom = () => {
     map[door0y * size + 9] = DOOR0;
 
     map[door1y * size + 1] = PLAYER;
+    player.x = 1;
+    player.y = door1y;
 
     currentRoom = {
         d1: { x: 0, y: door1y },

@@ -1,4 +1,4 @@
-let rand = (min, max) => Math.floor(Math.random() * (max - min)) + min
+let rand = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
 let setAreaOnArr = (x, y, w, h, value) => {
     for (let i = y; i < y + h; i++) {

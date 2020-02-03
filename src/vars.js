@@ -29,7 +29,7 @@ let EMPTY = 99;
 let canvas = document.getElementsByTagName('canvas')[0];
 let ctx = canvas.getContext('2d');
 
-let map = new Array(100).fill(0);
+let map = new Array(100).fill(EMPTY);
 
 let colors = [ '#0BF8F1', '#F61677', '#FFF' ];
 
@@ -44,3 +44,23 @@ let currentRoom = {
     d0: { x: 0, y: 0 },
     m: [ ]
 }
+
+let mobs = {};
+let player = { 
+    x: 0, 
+    y: 0, 
+    m: (c, r) => {
+        if (map[r * size + c] == EMPTY) {
+            player.s(c, r);
+        } else if (mobs[r * size + c]) {
+            console.log('attack');
+        }
+    },
+
+    s: (c, r) => {
+        map[player.y * size + player.x] = EMPTY;
+        player.x = c;
+        player.y = r;
+        map[player.y * size + player.x] = PLAYER;
+    }
+};
