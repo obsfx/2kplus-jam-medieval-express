@@ -45,14 +45,15 @@ let currentRoom = {
     m: [ ]
 }
 
-let mobs = {};
+let mobs = [];
 let player = { 
     x: 0, 
     y: 0, 
     m: (c, r) => {
         if (map[r * size + c] == EMPTY) {
             player.s(c, r);
-        } else if (mobs[r * size + c]) {
+            operateMobs();
+        } else if (mobs.filter(e => e.x == c && e.y == r)[0]) {
             console.log('attack');
         }
     },

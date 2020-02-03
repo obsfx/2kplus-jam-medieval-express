@@ -49,14 +49,15 @@ let currentRoom = {
     m: [ ]
 }
 
-let mobs = {};
+let mobs = [];
 let player = { 
     x: 0, 
     y: 0, 
     m: (c, r) => {
         if (map[r * size + c] == EMPTY) {
             player.s(c, r);
-        } else if (mobs[r * size + c]) {
+            operateMobs();
+        } else if (mobs.filter(e => e.x == c && e.y == r)[0]) {
             console.log('attack');
         }
     },
@@ -92,6 +93,28 @@ let getAvailablePos = () => {
     });
 
     return pos;
+}
+
+let operateMobs = () => {
+
+    mobs.map((e, i) => {
+        let c = player.x > e.x ? 1 : -1;
+        let r = player.y > e.y ? 1 : -1;
+
+        if (rand(0, 9) > 2) {
+            if (map[e.y * size + e.x + c] == PLAYER || map[(e.y + r) * size + e.x] == PLAYER) {
+                console.log("mob attack")
+            } else if (map[e.y * size + e.x + c] == EMPTY && player.x != e.x) {
+                map[e.y * size + e.x + c] = map[e.y * size + e.x];
+                map[e.y * size + e.x] = EMPTY;
+                mobs[i].x = e.x + c;
+            } else if (map[(e.y + r) * size + e.x] == EMPTY) {
+                map[(e.y + r) * size + e.x] = map[e.y * size + e.x];
+                map[e.y * size + e.x] = EMPTY;
+                mobs[i].y = e.y + r;
+            }
+        }
+    })
 } 
 // ---------- ./src/room.js
 // ---------- 
@@ -111,9 +134,12 @@ let createRoom = () => {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
         map[randPos.y * size + randPos.x] = rand(MOB0, MOB3);
-        mobs[randPos.y * size + randPos.x] = {
+        mobs[mobs.length] = {
+            i: mobs.length,
             h: 10,
-            k: 0
+            k: 0,
+            x: randPos.x,
+            y: randPos.y
         }
     }
 
@@ -192,6 +218,7 @@ let loop = () => {
     ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
 
     currentRoom.m.map((e, i) => {
+
         if (e != EMPTY) {
             let color = colors[2];
 
@@ -199,6 +226,9 @@ let loop = () => {
             if (e > 3 && e < 8) color = colors[1];
 
             if (e != WALL) drawSprite(i % 10, Math.floor(i / 10), e, color);
+        } else {
+            ctx.fillStyle = '#666';
+            ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
         }
     });
 

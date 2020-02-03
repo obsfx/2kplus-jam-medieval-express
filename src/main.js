@@ -13,6 +13,7 @@ let loop = () => {
     ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
 
     currentRoom.m.map((e, i) => {
+
         if (e != EMPTY) {
             let color = colors[2];
 
@@ -20,6 +21,9 @@ let loop = () => {
             if (e > 3 && e < 8) color = colors[1];
 
             if (e != WALL) drawSprite(i % 10, Math.floor(i / 10), e, color);
+        } else {
+            ctx.fillStyle = '#666';
+            ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
         }
     });
 

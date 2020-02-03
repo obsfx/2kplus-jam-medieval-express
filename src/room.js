@@ -14,9 +14,12 @@ let createRoom = () => {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
         map[randPos.y * size + randPos.x] = rand(MOB0, MOB3);
-        mobs[randPos.y * size + randPos.x] = {
+        mobs[mobs.length] = {
+            i: mobs.length,
             h: 10,
-            k: 0
+            k: 0,
+            x: randPos.x,
+            y: randPos.y
         }
     }
 
