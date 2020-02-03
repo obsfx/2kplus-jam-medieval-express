@@ -23,7 +23,7 @@ let createRoom = () => {
         }
     }
 
-    let door1y = rand(1, 7);
+    let door1y = rand(1, 6);
     let door0y = rand(1, 7);
 
     map[door1y * size + 0] = DOOR1;
@@ -32,6 +32,10 @@ let createRoom = () => {
     map[door1y * size + 1] = PLAYER;
     player.x = 1;
     player.y = door1y;
+
+    map[(door1y + 1) * size + 1] = CARGO;
+    cargo.x = 1;
+    cargo.y = door1y + 1;
 
     currentRoom = {
         d1: { x: 0, y: door1y },

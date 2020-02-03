@@ -1,3 +1,5 @@
+//MedEx medival express
+
 createRoom();
 
 // drawSprite(1, 1, PLAYER, colors[0]);
@@ -17,7 +19,8 @@ let loop = () => {
         if (e != EMPTY) {
             let color = colors[2];
 
-            if (e == PLAYER || e == CARGO) color = colors[0];
+            if (e == PLAYER) color = colors[0];
+            if (e == CARGO) color = colors[3];
             if (e > 3 && e < 8) color = colors[1];
 
             if (e != WALL) drawSprite(i % 10, Math.floor(i / 10), e, color);
@@ -26,8 +29,8 @@ let loop = () => {
             ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
         }
     });
-
-    requestAnimationFrame(loop);
 }
 console.log(player, mobs);
-loop();
+
+setInterval(loop, 1E3 / 30);
+// loop();

@@ -22,6 +22,13 @@ let getAvailablePos = () => {
     return pos;
 }
 
+let set = (c, r, o, val) => {
+    map[o.y * size + o.x] = EMPTY;
+    o.x = c;
+    o.y = r;
+    map[o.y * size + o.x] = val;
+}
+
 let operateMobs = () => {
 
     mobs.map((e, i) => {
