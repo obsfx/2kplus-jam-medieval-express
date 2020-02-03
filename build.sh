@@ -12,6 +12,7 @@ merged_target=$build_dir/$merged_output
 files=(
     ./src/vars.js
     ./src/util.js
+    ./src/room.js
     ./src/sprites.js
     ./src/main.js
 )

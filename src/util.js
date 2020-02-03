@@ -1,4 +1,4 @@
-let clear = (x, y) => ctx.clearRect(x * base * scale, y * base * scale, base * scale, base * scale);
+let rand = (min, max) => Math.floor(Math.random() * (max - min)) + min
 
 let setAreaOnArr = (x, y, w, h, value) => {
     for (let i = y; i < y + h; i++) {
@@ -8,11 +8,16 @@ let setAreaOnArr = (x, y, w, h, value) => {
     }
 }
 
-let createRoom = () => {
-    setAreaOnArr(0, 0, size, size, WALL);
-    setAreaOnArr(1, 1, 8, 8, EMPTY);
+let getAvailablePos = () => {
+    let pos = [];
+    map.map((e, i) => {
+        if (e == EMPTY) {
+            pos.push({
+                x: i % size,
+                y: Math.floor(i / size)
+            })
+        }
+    });
 
-    ctx.fillStyle = colors[2];
-    ctx.fillRect(base * scale / 2, base * scale / 2, 9 * base * scale, 9 * base * scale);
-    ctx.clearRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
+    return pos;
 }
