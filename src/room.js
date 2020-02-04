@@ -2,7 +2,8 @@ let createRoom = () => {
     setAreaOnArr(0, 0, size, size, WALL);
     setAreaOnArr(1, 1, 8, 8, EMPTY);
 
-    let pos = getAvailablePos().filter(e => e.x > 1 && e.x < 8 && e.y > 1 && e.y < 8);
+    let pos = getAvailablePos().filter(e => e.x > 2 && e.x < 7 && e.y > 1 && e.y < 8);
+    mobs = [];
 
     for (let i = 0; i < rand(3, 5); i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
@@ -18,6 +19,7 @@ let createRoom = () => {
             i: mobs.length,
             h: 10,
             k: 0,
+            d: 0,
             x: randPos.x,
             y: randPos.y
         }
@@ -33,13 +35,12 @@ let createRoom = () => {
     player.x = 1;
     player.y = door1y;
 
-    map[(door1y + 1) * size + 1] = CARGO;
-    cargo.x = 1;
-    cargo.y = door1y + 1;
+    map[(door1y) * size + 2] = CARGO;
+    cargo.x = 2;
+    cargo.y = door1y;
 
-    currentRoom = {
+    doors = {
         d1: { x: 0, y: door1y },
-        d0: { x: 9, y: door0y },
-        m: map
+        d0: { x: 9, y: door0y }
     }
 }

@@ -1,4 +1,6 @@
 //MedEx medival express
+ctx.textBaseline = "top";
+ctx.font = "bold 10px monospace";
 
 createRoom();
 
@@ -14,7 +16,7 @@ let loop = () => {
     ctx.fillStyle = "#000";
     ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
 
-    currentRoom.m.map((e, i) => {
+    map.map((e, i) => {
 
         if (e != EMPTY) {
             let color = colors[2];
@@ -29,6 +31,15 @@ let loop = () => {
             ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
         }
     });
+
+    mobs.map(e => {
+        if (!e.d) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(e.x * base * scale, e.y * base * scale - base * scale / 2, 10, 10);
+            ctx.fillStyle = '#FF0';
+            ctx.fillText(e.h, e.x * base * scale, e.y * base * scale - base * scale / 2);
+        }
+    })
 }
 console.log(player, mobs);
 

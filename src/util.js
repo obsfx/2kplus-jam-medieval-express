@@ -35,7 +35,7 @@ let operateMobs = () => {
         let c = player.x > e.x ? 1 : -1;
         let r = player.y > e.y ? 1 : -1;
 
-        if (rand(0, 9) > 2) {
+        if (rand(0, 9) > 2 && !e.d) {
             if (map[e.y * size + e.x + c] == PLAYER || map[(e.y + r) * size + e.x] == PLAYER) {
                 console.log("mob attack")
             } else if (map[e.y * size + e.x + c] == EMPTY && player.x != e.x) {

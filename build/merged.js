@@ -17,8 +17,6 @@ let MISC0 = 8;
 let MISC1 = 9;
 let MISC2 = 10;
 
-let CORPSE = 11;
-
 let WALL = 98;
 let EMPTY = 99;
 
@@ -34,18 +32,17 @@ let ctx = canvas.getContext('2d');
 
 let map = new Array(100).fill(EMPTY);
 
-let colors = [ '#0BF8F1', '#F61677', '#FFF', '#0F0' ];
+let colors = [ '#0FF', '#F61677', '#FFF', '#0F0' ];
 
-let spriteSheet = '000110010001100100111101010001010101011001110101011001001110111000000000001100001011011110110111000000001111111100000000010000101111111110000001101111011010010110111101101110011011110110111101111111111000000110000001100000011000000110000001100000011000000100000000000000000110001010111101000101000001100000000000000000000000000000000000000110100001101000000010000101110010101001101000001001000011110100011001000000100011100101110101011001101110010100011000001000100011101100011011001010100110110001101010111010100000000000100000001100000111000001110000011100000111110011111111000000000000000000010000001110000110110001110110111110111111111100000000000000000011110000011000000110000001100000111100011111100000000000000000000000100000110001000100001010000111110110110111'.split("");
+let spriteSheet = '00011001000110010011110101000101010101100111010101100100111011100000000000110000101101111011011100000000111111110000000001000010111111111000000110111101101001011011110110111001101111011011110111111111100000011000000110000001100000011000000110000001100000010000000000000000011000101011110100010100000110000000000000000000000000000000000000011010000110100000001000010111001010100110100000100100001111010001100100000010001110010111010101100110111001010001100000100010001110110001101100101010011011000110101011101010000000000010000000110000011100000111000001110000011111001111111100000000000000000001000000111000011011000111011011111011111111110000000000000000001111000001100000011000000110000011110001111110'.split("");
 
 let size = 10;
 let base = 8;
 let scale = 3;
 
-let currentRoom = {
+let doors = {
     d1: { x: 0, y: 0 },
-    d0: { x: 0, y: 0 },
-    m: [ ]
+    d0: { x: 0, y: 0 }
 }
 
 let mobs = [];
@@ -58,6 +55,9 @@ let cargo = {
 let player = { 
     x: 0, 
     y: 0,
+    a: 1,
+    d: 0,
+    h: 15,
     g: 0,
 
     m: (c, r, d) => {
@@ -83,13 +83,26 @@ let player = {
             }
 
             operateMobs();
-        } else if (mobs.filter(e => e.x == c && e.y == r)[0]) {
-            console.log('attack');
+        } else if (mobs.filter(e => e.x == c && e.y == r && !e.d)[0]) {
+            let i = mobs.filter(e => e.x == c && e.y == r)[0].i;
+            if (mobs[i].h -= player.a) {
+                console.log("a");
+                console.log(mobs[i].h);
+            } else {
+                console.log('ded');
+                mobs[i].d = 1;
+                map[r * size + c] = EMPTY;
+            }
+
             operateMobs();
         } else if (map[r * size + c] == CARGO) {
             if (d == RIGHT) {
                 // console.log("SOLUNDASIN")
-                if (map[r * size + c + 1] == EMPTY) {
+                if (map[r * size + c + 1] == EMPTY || map[r * size + c + 1] == DOOR0) {
+                    if (map[r * size + c + 1] == DOOR0) {
+                        console.log("next room");
+                    }
+                    
                     set(c + 1, r, cargo, CARGO);
                     set(c, r, player, PLAYER);
                 }
@@ -160,7 +173,7 @@ let operateMobs = () => {
         let c = player.x > e.x ? 1 : -1;
         let r = player.y > e.y ? 1 : -1;
 
-        if (rand(0, 9) > 2) {
+        if (rand(0, 9) > 2 && !e.d) {
             if (map[e.y * size + e.x + c] == PLAYER || map[(e.y + r) * size + e.x] == PLAYER) {
                 console.log("mob attack")
             } else if (map[e.y * size + e.x + c] == EMPTY && player.x != e.x) {
@@ -181,7 +194,8 @@ let createRoom = () => {
     setAreaOnArr(0, 0, size, size, WALL);
     setAreaOnArr(1, 1, 8, 8, EMPTY);
 
-    let pos = getAvailablePos().filter(e => e.x > 1 && e.x < 8 && e.y > 1 && e.y < 8);
+    let pos = getAvailablePos().filter(e => e.x > 2 && e.x < 7 && e.y > 1 && e.y < 8);
+    mobs = [];
 
     for (let i = 0; i < rand(3, 5); i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
@@ -197,6 +211,7 @@ let createRoom = () => {
             i: mobs.length,
             h: 10,
             k: 0,
+            d: 0,
             x: randPos.x,
             y: randPos.y
         }
@@ -212,14 +227,13 @@ let createRoom = () => {
     player.x = 1;
     player.y = door1y;
 
-    map[(door1y + 1) * size + 1] = CARGO;
-    cargo.x = 1;
-    cargo.y = door1y + 1;
+    map[(door1y) * size + 2] = CARGO;
+    cargo.x = 2;
+    cargo.y = door1y;
 
-    currentRoom = {
+    doors = {
         d1: { x: 0, y: door1y },
-        d0: { x: 9, y: door0y },
-        m: map
+        d0: { x: 9, y: door0y }
     }
 } 
 // ---------- ./src/controls.js
@@ -278,6 +292,8 @@ let drawSprite = (x, y, index, color) => {
 // ---------- ./src/main.js
 // ---------- 
 //MedEx medival express
+ctx.textBaseline = "top";
+ctx.font = "bold 10px monospace";
 
 createRoom();
 
@@ -293,7 +309,7 @@ let loop = () => {
     ctx.fillStyle = "#000";
     ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
 
-    currentRoom.m.map((e, i) => {
+    map.map((e, i) => {
 
         if (e != EMPTY) {
             let color = colors[2];
@@ -308,6 +324,15 @@ let loop = () => {
             ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
         }
     });
+
+    mobs.map(e => {
+        if (!e.d) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(e.x * base * scale, e.y * base * scale - base * scale / 2, 10, 10);
+            ctx.fillStyle = '#FF0';
+            ctx.fillText(e.h, e.x * base * scale, e.y * base * scale - base * scale / 2);
+        }
+    })
 }
 console.log(player, mobs);
 
