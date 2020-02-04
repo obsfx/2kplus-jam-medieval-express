@@ -1,4 +1,6 @@
-let createRoom = () => {
+let createRoom = level => {
+    
+    console.log(map);
     setAreaOnArr(0, 0, size, size, WALL);
     setAreaOnArr(1, 1, 8, 8, EMPTY);
 
@@ -25,10 +27,10 @@ let createRoom = () => {
         }
     }
 
-    let door1y = rand(1, 6);
-    let door0y = rand(1, 7);
+    let door1y = !level ? rand(1, 8) : player.y;
+    let door0y = rand(1, 8);
 
-    map[door1y * size + 0] = DOOR1;
+    map[door1y * size + 0] = DOOR0;
     map[door0y * size + 9] = DOOR0;
 
     map[door1y * size + 1] = PLAYER;
@@ -43,4 +45,6 @@ let createRoom = () => {
         d1: { x: 0, y: door1y },
         d0: { x: 9, y: door0y }
     }
+
+    locked = false;
 }

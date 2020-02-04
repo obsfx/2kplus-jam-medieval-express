@@ -43,6 +43,12 @@ let doors = {
 
 let mobs = [];
 
+let currentRoom = 0;
+let maxRoom = 8;
+
+let locked = false;
+let gameOver = false;
+
 let cargo = {
     x: 0,
     y: 0
@@ -81,7 +87,9 @@ let player = {
             operateMobs();
         } else if (mobs.filter(e => e.x == c && e.y == r && !e.d)[0]) {
             let i = mobs.filter(e => e.x == c && e.y == r)[0].i;
-            if (mobs[i].h -= player.a) {
+            mobs[i].h -= player.a;
+
+            if (mobs[i].h > 0) {
                 console.log("a");
                 console.log(mobs[i].h);
             } else {
@@ -97,6 +105,17 @@ let player = {
                 if (map[r * size + c + 1] == EMPTY || map[r * size + c + 1] == DOOR0) {
                     if (map[r * size + c + 1] == DOOR0) {
                         console.log("next room");
+
+                        if (++currentRoom > 8) {
+                            gameOver = true;
+                            ctx.fillStyle = '#000';
+                            ctx.fillRect(0, 0, 500, 500);
+                            ctx.fillStyle = '#FF0';
+                            ctx.fillText("Game Over", 50, 50);
+                        } else {
+                            locked = true;
+                            setTimeout(() => createRoom(++currentRoom), 250);
+                        }
                     }
                     
                     set(c + 1, r, cargo, CARGO);

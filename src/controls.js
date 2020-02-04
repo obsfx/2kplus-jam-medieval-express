@@ -5,9 +5,13 @@
 // });
 
 window.onkeydown = e => {
-    if (!e.repeat) {
+    if (!e.repeat && !locked) {
         if (e.keyCode == 69) {
             player.g = 1;
+
+            if (gameOver) {
+                run();
+            }
         }
 
         //right
