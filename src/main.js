@@ -10,7 +10,7 @@ let run = () => {
 
     player.a = 1;
     player.d = 0;
-    player.h = 45;
+    player.h = 30;
     player.g = 0;
 
     createRoom(currentRoom);
