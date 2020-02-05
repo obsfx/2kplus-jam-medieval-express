@@ -5,6 +5,8 @@ if [ ! -d $build_dir ]; then
     mkdir $build_dir
 fi
 
+clear_merged=1
+
 index_html=./index.html
 merged_output=merged.js
 merged_target=$build_dir/$merged_output
@@ -41,14 +43,21 @@ echo "</script>" >> $merged_packed_target
 compiler=./tools/closure-compiler.jar
 compilation_level=ADVANCED_OPTIMIZATIONS
 input=$merged_target
-compiled_output=compiled.js
+compiled_output=index.js
 compilation_output=$build_dir/$compiled_output
 
 echo "closure compiler executed..."
 
 java -jar $compiler --compilation_level $compilation_level --language_out=ECMASCRIPT6 --js $input --js_output_file $compilation_output
 
-compiled_packed_output=compiled.html
+if [ $clear_merged == 1 ]; then
+    echo "merged output deleted."
+    
+    rm $merged_target
+    rm $merged_packed_target
+fi
+
+compiled_packed_output=index.html
 compiled_packed_target=$build_dir/$compiled_packed_output
 
 cat $index_html > $compiled_packed_target
