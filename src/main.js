@@ -1,6 +1,6 @@
 //MedEx medival express
 ctx.textBaseline = "top";
-ctx.font = "bold 10px monospace";
+ctx.font = "bold 12px monospace";
 
 let run = () => {
     currentRoom = 0;
@@ -24,9 +24,9 @@ let loop = () => {
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, 500, 500);
         ctx.fillStyle = colors[2];
-        ctx.fillRect(base * scale / 2, base * scale / 2, 9 * base * scale, 9 * base * scale);
+        ctx.fillRect(base * scale / 2, base * scale / 2, (size - 1) * base * scale, (size - 1) * base * scale);
         ctx.fillStyle = "#000";
-        ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
+        ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, (size - 1) * base * scale - 4, (size - 1) * base * scale - 4);
 
         map.map((e, i) => {
 
@@ -37,22 +37,22 @@ let loop = () => {
                 if (e == CARGO) color = colors[3];
                 if (e > 3 && e < 8) color = colors[1];
 
-                if (e != WALL) drawSprite(i % 10, Math.floor(i / 10), e, color);
+                if (e != WALL) drawSprite(i % size, Math.floor(i / size), e, color);
             } else {
                 ctx.fillStyle = '#666';
-                ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
+                ctx.fillRect(i % size * base * scale + base, Math.floor(i / size) * base * scale + base, scale, scale);
             }
         });
     }
 
-    // mobs.map(e => {
-    //     if (!e.d) {
-    //         ctx.fillStyle = '#000';
-    //         ctx.fillRect(e.x * base * scale, e.y * base * scale - base * scale / 2, 10, 10);
-    //         ctx.fillStyle = '#FF0';
-    //         ctx.fillText(e.h, e.x * base * scale, e.y * base * scale - base * scale / 2);
-    //     }
-    // })
+    mobs.map(e => {
+        if (!e.d) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(e.x * base * scale, e.y * base * scale - base * scale / 2, 10, 10);
+            ctx.fillStyle = '#FF0';
+            ctx.fillText(e.h, e.x * base * scale, e.y * base * scale - base * scale / 2);
+        }
+    })
 }
 // console.log(player, mobs);
 

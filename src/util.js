@@ -39,14 +39,14 @@ let operateMobs = () => {
             if (map[e.y * size + e.x + c] == PLAYER || map[(e.y + r) * size + e.x] == PLAYER) {
                 console.log("mob attack")
             } else if (map[e.y * size + e.x + c] == EMPTY && player.x != e.x) {
-                map[e.y * size + e.x + c] = map[e.y * size + e.x];
+                map[e.y * size + e.x + c] = e.t;
                 map[e.y * size + e.x] = EMPTY;
                 mobs[i].x = e.x + c;
             } else if (map[(e.y + r) * size + e.x] == EMPTY) {
-                map[(e.y + r) * size + e.x] = map[e.y * size + e.x];
+                map[(e.y + r) * size + e.x] = e.t;
                 map[e.y * size + e.x] = EMPTY;
                 mobs[i].y = e.y + r;
             }
         }
-    })
+    });
 }

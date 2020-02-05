@@ -30,13 +30,13 @@ let DOWN = 3;
 let canvas = document.getElementsByTagName('canvas')[0];
 let ctx = canvas.getContext('2d');
 
-let map = new Array(100).fill(EMPTY);
+let map = new Array(144).fill(EMPTY);
 
 let colors = [ '#0FF', '#F61677', '#FFF', '#0F0' ];
 
 let spriteSheet = '00011001000110010011110101000101010101100111010101100100111011100000000000110000101101111011011100000000111111110000000001000010111111111000000110111101101001011011110110111001101111011011110111111111100000011000000110000001100000011000000110000001100000010000000000000000011000101011110100010100000110000000000000000000000000000000000000011010000110100000001000010111001010100110100000100100001111010001100100000010001110010111010101100110111001010001100000100010001110110001101100101010011011000110101011101010000000000010000000110000011100000111000001110000011111001111111100000000000000000001000000111000011011000111011011111011111111110000000000000000001111000001100000011000000110000011110001111110'.split("");
 
-let size = 10;
+let size = 12;
 let base = 8;
 let scale = 3;
 
@@ -47,8 +47,34 @@ let doors = {
 
 let mobs = [];
 
+let mobd = [
+    { a: 1, h: 2 },
+    { a: 1, h: 3 },
+    { a: 2, h: 4 },
+    { a: 3, h: 4 }
+]
+
+let levels = [
+    { r: MOB0, m: 3 },
+    { r: MOB0, m: 3 },
+    { r: MOB0, m: 3 },
+    { r: MOB1, m: 2 },
+    { r: MOB1, m: 2 },
+    { r: MOB1, m: 3 },
+    { r: MOB2, m: 3 },
+    { r: MOB2, m: 4 },
+    { r: MOB2, m: 5 },
+    { r: MOB2, m: 2 },
+    { r: MOB3, m: 2 },
+    { r: MOB1, m: 2 },
+    { r: MOB1, m: 6 },
+    { r: MOB2, m: 6 },
+    { r: MOB2, m: 4 },
+    { r: MOB3, m: 5 },
+    { r: MOB3, m: 5 }
+]
+
 let currentRoom = 0;
-let maxRoom = 8;
 
 let locked = false;
 let gameOver = false;
@@ -90,7 +116,7 @@ let player = {
 
             operateMobs();
         } else if (mobs.filter(e => e.x == c && e.y == r && !e.d)[0]) {
-            let i = mobs.filter(e => e.x == c && e.y == r)[0].i;
+            let i = mobs.filter(e => e.x == c && e.y == r && !e.d)[0].i;
             mobs[i].h -= player.a;
 
             if (mobs[i].h > 0) {
@@ -110,7 +136,7 @@ let player = {
                     if (map[r * size + c + 1] == DOOR0) {
                         console.log("next room");
 
-                        if (++currentRoom > 8) {
+                        if (++currentRoom > levels.length - 1) {
                             gameOver = true;
                             ctx.fillStyle = '#000';
                             ctx.fillRect(0, 0, 500, 500);
@@ -118,7 +144,7 @@ let player = {
                             ctx.fillText("Game Over", 50, 50);
                         } else {
                             locked = true;
-                            setTimeout(() => createRoom(++currentRoom), 250);
+                            setTimeout(() => createRoom(currentRoom), 250);
                         }
                     }
                     
@@ -196,16 +222,16 @@ let operateMobs = () => {
             if (map[e.y * size + e.x + c] == PLAYER || map[(e.y + r) * size + e.x] == PLAYER) {
                 console.log("mob attack")
             } else if (map[e.y * size + e.x + c] == EMPTY && player.x != e.x) {
-                map[e.y * size + e.x + c] = map[e.y * size + e.x];
+                map[e.y * size + e.x + c] = e.t;
                 map[e.y * size + e.x] = EMPTY;
                 mobs[i].x = e.x + c;
             } else if (map[(e.y + r) * size + e.x] == EMPTY) {
-                map[(e.y + r) * size + e.x] = map[e.y * size + e.x];
+                map[(e.y + r) * size + e.x] = e.t;
                 map[e.y * size + e.x] = EMPTY;
                 mobs[i].y = e.y + r;
             }
         }
-    })
+    });
 } 
 // ---------- ./src/room.js
 // ---------- 
@@ -213,36 +239,40 @@ let createRoom = level => {
     
     console.log(map);
     setAreaOnArr(0, 0, size, size, WALL);
-    setAreaOnArr(1, 1, 8, 8, EMPTY);
+    setAreaOnArr(1, 1, size - 2, size - 2, EMPTY);
 
     let pos = getAvailablePos().filter(e => e.x > 2 && e.x < 7 && e.y > 1 && e.y < 8);
     mobs = [];
-
-    for (let i = 0; i < rand(3, 5); i++) {
+    let miscc = rand(3, 6);
+    for (let i = 0; i < miscc; i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
         map[randPos.y * size + randPos.x] = rand(MISC0, MISC2);
     }
 
-    for (let i = 0; i < rand(1, 4); i++) {
+    let mobc = rand(levels[currentRoom].m, 6);
+    for (let i = 0; i < mobc; i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
-        map[randPos.y * size + randPos.x] = rand(MOB0, MOB3);
+        let rmob = levels[currentRoom].r;
+        // console.log(mobd[rmob - MOB0], rmob);
+        map[randPos.y * size + randPos.x] = rmob;
         mobs[mobs.length] = {
             i: mobs.length,
-            h: 10,
-            k: 0,
+            t: rmob,
+            h: mobd[rmob - MOB0].h,
+            a: mobd[rmob - MOB0].d,
             d: 0,
             x: randPos.x,
             y: randPos.y
         }
     }
 
-    let door1y = !level ? rand(1, 8) : player.y;
-    let door0y = rand(1, 8);
+    let door1y = !level ? rand(1, size - 2) : player.y;
+    let door0y = rand(1, size - 2);
 
-    map[door1y * size + 0] = DOOR0;
-    map[door0y * size + 9] = DOOR0;
+    map[door1y * size] = DOOR0;
+    map[door0y * size + size - 1] = DOOR0;
 
     map[door1y * size + 1] = PLAYER;
     player.x = 1;
@@ -254,7 +284,7 @@ let createRoom = level => {
 
     doors = {
         d1: { x: 0, y: door1y },
-        d0: { x: 9, y: door0y }
+        d0: { x: size - 1, y: door0y }
     }
 
     locked = false;
@@ -320,7 +350,7 @@ let drawSprite = (x, y, index, color) => {
 // ---------- 
 //MedEx medival express
 ctx.textBaseline = "top";
-ctx.font = "bold 10px monospace";
+ctx.font = "bold 12px monospace";
 
 let run = () => {
     currentRoom = 0;
@@ -344,9 +374,9 @@ let loop = () => {
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, 500, 500);
         ctx.fillStyle = colors[2];
-        ctx.fillRect(base * scale / 2, base * scale / 2, 9 * base * scale, 9 * base * scale);
+        ctx.fillRect(base * scale / 2, base * scale / 2, (size - 1) * base * scale, (size - 1) * base * scale);
         ctx.fillStyle = "#000";
-        ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, 9 * base * scale - 4, 9 * base * scale - 4);
+        ctx.fillRect(base * scale / 2 + 2, base * scale / 2 + 2, (size - 1) * base * scale - 4, (size - 1) * base * scale - 4);
 
         map.map((e, i) => {
 
@@ -357,22 +387,22 @@ let loop = () => {
                 if (e == CARGO) color = colors[3];
                 if (e > 3 && e < 8) color = colors[1];
 
-                if (e != WALL) drawSprite(i % 10, Math.floor(i / 10), e, color);
+                if (e != WALL) drawSprite(i % size, Math.floor(i / size), e, color);
             } else {
                 ctx.fillStyle = '#666';
-                ctx.fillRect(i % 10 * base * scale + base, Math.floor(i / 10) * base * scale + base, scale, scale);
+                ctx.fillRect(i % size * base * scale + base, Math.floor(i / size) * base * scale + base, scale, scale);
             }
         });
     }
 
-    // mobs.map(e => {
-    //     if (!e.d) {
-    //         ctx.fillStyle = '#000';
-    //         ctx.fillRect(e.x * base * scale, e.y * base * scale - base * scale / 2, 10, 10);
-    //         ctx.fillStyle = '#FF0';
-    //         ctx.fillText(e.h, e.x * base * scale, e.y * base * scale - base * scale / 2);
-    //     }
-    // })
+    mobs.map(e => {
+        if (!e.d) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(e.x * base * scale, e.y * base * scale - base * scale / 2, 10, 10);
+            ctx.fillStyle = '#FF0';
+            ctx.fillText(e.h, e.x * base * scale, e.y * base * scale - base * scale / 2);
+        }
+    })
 }
 // console.log(player, mobs);
 

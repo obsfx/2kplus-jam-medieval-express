@@ -2,36 +2,40 @@ let createRoom = level => {
     
     console.log(map);
     setAreaOnArr(0, 0, size, size, WALL);
-    setAreaOnArr(1, 1, 8, 8, EMPTY);
+    setAreaOnArr(1, 1, size - 2, size - 2, EMPTY);
 
     let pos = getAvailablePos().filter(e => e.x > 2 && e.x < 7 && e.y > 1 && e.y < 8);
     mobs = [];
-
-    for (let i = 0; i < rand(3, 5); i++) {
+    let miscc = rand(3, 6);
+    for (let i = 0; i < miscc; i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
         map[randPos.y * size + randPos.x] = rand(MISC0, MISC2);
     }
 
-    for (let i = 0; i < rand(1, 4); i++) {
+    let mobc = rand(levels[currentRoom].m, 6);
+    for (let i = 0; i < mobc; i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
         // console.log(rand(10, 15), randPos.y * size + randPos.x, randPos)
-        map[randPos.y * size + randPos.x] = rand(MOB0, MOB3);
+        let rmob = levels[currentRoom].r;
+        // console.log(mobd[rmob - MOB0], rmob);
+        map[randPos.y * size + randPos.x] = rmob;
         mobs[mobs.length] = {
             i: mobs.length,
-            h: 10,
-            k: 0,
+            t: rmob,
+            h: mobd[rmob - MOB0].h,
+            a: mobd[rmob - MOB0].d,
             d: 0,
             x: randPos.x,
             y: randPos.y
         }
     }
 
-    let door1y = !level ? rand(1, 8) : player.y;
-    let door0y = rand(1, 8);
+    let door1y = !level ? rand(1, size - 2) : player.y;
+    let door0y = rand(1, size - 2);
 
-    map[door1y * size + 0] = DOOR0;
-    map[door0y * size + 9] = DOOR0;
+    map[door1y * size] = DOOR0;
+    map[door0y * size + size - 1] = DOOR0;
 
     map[door1y * size + 1] = PLAYER;
     player.x = 1;
@@ -43,7 +47,7 @@ let createRoom = level => {
 
     doors = {
         d1: { x: 0, y: door1y },
-        d0: { x: 9, y: door0y }
+        d0: { x: size - 1, y: door0y }
     }
 
     locked = false;

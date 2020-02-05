@@ -26,13 +26,13 @@ let DOWN = 3;
 let canvas = document.getElementsByTagName('canvas')[0];
 let ctx = canvas.getContext('2d');
 
-let map = new Array(100).fill(EMPTY);
+let map = new Array(144).fill(EMPTY);
 
 let colors = [ '#0FF', '#F61677', '#FFF', '#0F0' ];
 
 let spriteSheet = '00011001000110010011110101000101010101100111010101100100111011100000000000110000101101111011011100000000111111110000000001000010111111111000000110111101101001011011110110111001101111011011110111111111100000011000000110000001100000011000000110000001100000010000000000000000011000101011110100010100000110000000000000000000000000000000000000011010000110100000001000010111001010100110100000100100001111010001100100000010001110010111010101100110111001010001100000100010001110110001101100101010011011000110101011101010000000000010000000110000011100000111000001110000011111001111111100000000000000000001000000111000011011000111011011111011111111110000000000000000001111000001100000011000000110000011110001111110'.split("");
 
-let size = 10;
+let size = 12;
 let base = 8;
 let scale = 3;
 
@@ -43,8 +43,34 @@ let doors = {
 
 let mobs = [];
 
+let mobd = [
+    { a: 1, h: 2 },
+    { a: 1, h: 3 },
+    { a: 2, h: 4 },
+    { a: 3, h: 4 }
+]
+
+let levels = [
+    { r: MOB0, m: 3 },
+    { r: MOB0, m: 3 },
+    { r: MOB0, m: 3 },
+    { r: MOB1, m: 2 },
+    { r: MOB1, m: 2 },
+    { r: MOB1, m: 3 },
+    { r: MOB2, m: 3 },
+    { r: MOB2, m: 4 },
+    { r: MOB2, m: 5 },
+    { r: MOB2, m: 2 },
+    { r: MOB3, m: 2 },
+    { r: MOB1, m: 2 },
+    { r: MOB1, m: 6 },
+    { r: MOB2, m: 6 },
+    { r: MOB2, m: 4 },
+    { r: MOB3, m: 5 },
+    { r: MOB3, m: 5 }
+]
+
 let currentRoom = 0;
-let maxRoom = 8;
 
 let locked = false;
 let gameOver = false;
@@ -86,7 +112,7 @@ let player = {
 
             operateMobs();
         } else if (mobs.filter(e => e.x == c && e.y == r && !e.d)[0]) {
-            let i = mobs.filter(e => e.x == c && e.y == r)[0].i;
+            let i = mobs.filter(e => e.x == c && e.y == r && !e.d)[0].i;
             mobs[i].h -= player.a;
 
             if (mobs[i].h > 0) {
@@ -106,7 +132,7 @@ let player = {
                     if (map[r * size + c + 1] == DOOR0) {
                         console.log("next room");
 
-                        if (++currentRoom > 8) {
+                        if (++currentRoom > levels.length - 1) {
                             gameOver = true;
                             ctx.fillStyle = '#000';
                             ctx.fillRect(0, 0, 500, 500);
@@ -114,7 +140,7 @@ let player = {
                             ctx.fillText("Game Over", 50, 50);
                         } else {
                             locked = true;
-                            setTimeout(() => createRoom(++currentRoom), 250);
+                            setTimeout(() => createRoom(currentRoom), 250);
                         }
                     }
                     
