@@ -7,6 +7,7 @@ let run = () => {
     locked = false;
     gameOver = false;
     initial = false;
+    logs = [];
 
     player.a = 1;
     player.d = 0;
@@ -63,15 +64,16 @@ let loop = () => {
         });
 
         ctx.fillStyle = '#FF0';
-        ctx.fillText('MedEx: Medival Express', base * scale, size * base * scale);
-        ctx.fillText('Room: ' + (currentRoom + 1) + '/' + levels.length + ' HP: ' + player.h, base * scale, (size + 1) * base * scale);
+        ctx.fillText("Room: " + (currentRoom + 1) + "/" + levels.length + " HP: " + player.h, base * scale, (size + 1) * base * scale);
+
+        logs.map((e, i, arr) => ctx.fillText(arr[arr.length - 1 - i], (size + 1) * base * scale, (i + 1) * base * scale))
+        if (logs.length > 20) logs.shift();
     } else {
         ctx.fillStyle = '#FF0';
-        if (player.d) ctx.fillText("You died for the gods... for... transportation gods...", base * scale, 1 * base * scale);
-        ctx.fillText("MedEx / created for 2kplus game jam", base * scale, 2 * base * scale);
-        ctx.fillText("github.com/obsfx / twitter.com/obsfx", base * scale, 3 * base * scale);
-        if (initial) ctx.fillText("<Press [E] to start the game>", base * scale, 4 * base * scale);
-        else ctx.fillText("Thanks for playing! <Press [E] if you want to play again>", base * scale, 4 * base * scale);
+        if (player.d) ctx.fillText("You died for the gods... for... transportation gods...", base * scale, base * scale);
+        ctx.fillText("Medival Express / 2kjplusjam / twitter github @obsfx", base * scale, 2 * base * scale);
+        let t = (initial) ? "Press E to start the game" : "Thanks for playing! Press E to play again";
+        ctx.fillText(t, base * scale, 3 * base * scale);
         
     }
 

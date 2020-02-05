@@ -72,7 +72,7 @@ let currentRoom;
 
 let locked;
 let gameOver = true;
-
+let logs = [];
 let initial = true;
 
 let cargo = {
@@ -114,10 +114,11 @@ let player = {
         } else if (mobs.filter(e => e.x == c && e.y == r && !e.d)[0]) {
             let i = mobs.filter(e => e.x == c && e.y == r && !e.d)[0].i;
             mobs[i].h -= player.a;
-
+            logs.push("you attacked");
             if (mobs[i].h < 1) {
                 mobs[i].d = 1;
                 map[r * size + c] = EMPTY;
+                logs.push("you killed a creature");
             }
 
             operateMobs();
@@ -131,6 +132,7 @@ let player = {
                             gameOver = true;          
                         } else {
                             locked = true;
+                            logs.push("next room");
                             setTimeout(() => createRoom(currentRoom), 250);
                         }
                     }

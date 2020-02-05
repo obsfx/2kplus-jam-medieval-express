@@ -27,18 +27,20 @@ let set = (c, r, o, val) => {
     o.x = c;
     o.y = r;
     map[o.y * size + o.x] = val;
+
+    let t = (val == PLAYER) ? "you moved" : "package moved"; 
+    logs.push(t);
 }
 
 let operateMobs = () => {
-
     mobs.map((e, i) => {
         let c = player.x > e.x ? 1 : -1;
         let r = player.y > e.y ? 1 : -1;
-
-        // console.log("mobs moving");
+        
         if (rand(0, 9) > 4 && !e.d) {
             if (map[e.y * size + e.x + c] == PLAYER || map[(e.y + r) * size + e.x] == PLAYER) {
                 player.h -= 1;
+                logs.push("you took damage");
                 if (player.h == 0) {
                     player.d = 1;
                     gameOver = true;
