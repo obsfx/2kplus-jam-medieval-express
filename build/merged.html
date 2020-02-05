@@ -416,7 +416,7 @@ let loop = () => {
         ctx.fillText('Room: ' + (currentRoom + 1) + '/' + levels.length + ' HP: ' + player.h, base * scale, (size + 1) * base * scale);
     } else {
         ctx.fillStyle = '#FF0';
-        if (player.d) ctx.fillText("You sacrificed your life for gods... for... transportation gods...", base * scale, 1 * base * scale);
+        if (player.d) ctx.fillText("You died for the gods... for... transportation gods...", base * scale, 1 * base * scale);
         ctx.fillText("MedEx / created for 2kplus game jam", base * scale, 2 * base * scale);
         ctx.fillText("github.com/obsfx / twitter.com/obsfx", base * scale, 3 * base * scale);
         if (initial) ctx.fillText("<Press [E] to start the game>", base * scale, 4 * base * scale);
