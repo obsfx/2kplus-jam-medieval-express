@@ -46,8 +46,8 @@ let mobs = [];
 let mobd = [
     { a: 1, h: 2 },
     { a: 1, h: 3 },
-    { a: 2, h: 4 },
-    { a: 3, h: 4 }
+    { a: 1, h: 4 },
+    { a: 2, h: 4 }
 ]
 
 let levels = [
@@ -60,14 +60,12 @@ let levels = [
     { r: MOB2, m: 3 },
     { r: MOB2, m: 4 },
     { r: MOB2, m: 5 },
-    { r: MOB2, m: 2 },
-    { r: MOB3, m: 2 },
-    { r: MOB1, m: 2 },
-    { r: MOB1, m: 6 },
-    { r: MOB2, m: 6 },
-    { r: MOB2, m: 4 },
+    { r: MOB2, m: 3 },
+    { r: MOB3, m: 3 },
+    { r: MOB1, m: 3 },
+    { r: MOB1, m: 4 },
+    { r: MOB2, m: 5 },
     { r: MOB3, m: 5 },
-    { r: MOB3, m: 5 }
 ]
 
 let currentRoom = 0;
@@ -85,7 +83,7 @@ let player = {
     y: 0,
     a: 1,
     d: 0,
-    h: 15,
+    h: 20,
     g: 0,
 
     m: (c, r, d) => {
@@ -133,11 +131,7 @@ let player = {
                         console.log("next room");
 
                         if (++currentRoom > levels.length - 1) {
-                            gameOver = true;
-                            ctx.fillStyle = '#000';
-                            ctx.fillRect(0, 0, 500, 500);
-                            ctx.fillStyle = '#FF0';
-                            ctx.fillText("Game Over", 50, 50);
+                            gameOver = true;          
                         } else {
                             locked = true;
                             setTimeout(() => createRoom(currentRoom), 250);
@@ -146,6 +140,7 @@ let player = {
                     
                     set(c + 1, r, cargo, CARGO);
                     set(c, r, player, PLAYER);
+                    operateMobs();
                 }
             }
             
@@ -154,6 +149,7 @@ let player = {
                 if (map[r * size + c - 1] == EMPTY) {
                     set(c - 1, r, cargo, CARGO);
                     set(c, r, player, PLAYER);
+                    operateMobs();
                 }
             }
             
@@ -162,6 +158,7 @@ let player = {
                 if (map[(r - 1) * size + c] == EMPTY) {
                     set(c, r - 1, cargo, CARGO);
                     set(c, r, player, PLAYER);
+                    operateMobs();
                 }
             }
             
@@ -170,6 +167,7 @@ let player = {
                 if (map[(r + 1) * size + c] == EMPTY) {
                     set(c, r + 1, cargo, CARGO);
                     set(c, r, player, PLAYER);
+                    operateMobs();
                 }
             }
         }
