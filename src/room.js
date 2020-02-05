@@ -1,6 +1,4 @@
 let createRoom = level => {
-    
-    console.log(map);
     setAreaOnArr(0, 0, size, size, WALL);
     setAreaOnArr(1, 1, size - 2, size - 2, EMPTY);
 

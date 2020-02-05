@@ -68,10 +68,12 @@ let levels = [
     { r: MOB3, m: 5 },
 ]
 
-let currentRoom = 0;
+let currentRoom;
 
-let locked = false;
-let gameOver = false;
+let locked;
+let gameOver = true;
+
+let initial = true;
 
 let cargo = {
     x: 0,
@@ -83,7 +85,7 @@ let player = {
     y: 0,
     a: 1,
     d: 0,
-    h: 20,
+    h: 45,
     g: 0,
 
     m: (c, r, d) => {
@@ -113,11 +115,7 @@ let player = {
             let i = mobs.filter(e => e.x == c && e.y == r && !e.d)[0].i;
             mobs[i].h -= player.a;
 
-            if (mobs[i].h > 0) {
-                console.log("a");
-                console.log(mobs[i].h);
-            } else {
-                console.log('ded');
+            if (mobs[i].h < 1) {
                 mobs[i].d = 1;
                 map[r * size + c] = EMPTY;
             }
@@ -128,7 +126,6 @@ let player = {
                 // console.log("SOLUNDASIN")
                 if (map[r * size + c + 1] == EMPTY || map[r * size + c + 1] == DOOR0) {
                     if (map[r * size + c + 1] == DOOR0) {
-                        console.log("next room");
 
                         if (++currentRoom > levels.length - 1) {
                             gameOver = true;          

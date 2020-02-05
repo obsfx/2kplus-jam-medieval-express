@@ -6,10 +6,11 @@ let run = () => {
     currentRoom = 0;
     locked = false;
     gameOver = false;
+    initial = false;
 
     player.a = 1;
     player.d = 0;
-    player.h = 20;
+    player.h = 45;
     player.g = 0;
 
     createRoom(currentRoom);
@@ -63,14 +64,15 @@ let loop = () => {
 
         ctx.fillStyle = '#FF0';
         ctx.fillText('MedEx: Medival Express', base * scale, size * base * scale);
-        ctx.fillText('Room: ' + (currentRoom + 1), base * scale, (size + 1) * base * scale);
-        ctx.fillText('HP: ' + player.h, 4 * base * scale, (size + 1) * base * scale);
+        ctx.fillText('Room: ' + (currentRoom + 1) + '/' + levels.length + ' HP: ' + player.h, base * scale, (size + 1) * base * scale);
     } else {
         ctx.fillStyle = '#FF0';
         if (player.d) ctx.fillText("You sacrificed your life for gods... transportation gods.", base * scale, 1 * base * scale);
         ctx.fillText("MedEx / created for 2kplus game jam", base * scale, 2 * base * scale);
-        ctx.fillText("Thanks for playing! / github.com/obsfx / twitter.com/obsfx", base * scale, 3 * base * scale);
-        ctx.fillText("<Press [E] if you want to play again>", base * scale, 4 * base * scale);
+        ctx.fillText("github.com/obsfx / twitter.com/obsfx", base * scale, 3 * base * scale);
+        if (initial) ctx.fillText("<Press [E] to start the game>", base * scale, 4 * base * scale);
+        else ctx.fillText("Thanks for playing! <Press [E] if you want to play again>", base * scale, 4 * base * scale);
+        
     }
 
     // if (player.g && (player.x - cargo.x)**2 + (player.y - cargo.y)**2 == 1) {
@@ -91,6 +93,6 @@ let loop = () => {
 }
 // console.log(player, mobs);
 
-run();
+// run();
 setInterval(loop, 1E3 / 30);
 // loop();
