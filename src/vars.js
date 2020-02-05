@@ -2,16 +2,15 @@ let PLAYER = 0;
 let CARGO = 1;
 
 let DOOR0 = 2;
-let DOOR1 = 3;
 
-let MOB0 = 4;
-let MOB1 = 5;
-let MOB2 = 6;
-let MOB3 = 7;
+let MOB0 = 3;
+let MOB1 = 4;
+let MOB2 = 5;
+let MOB3 = 6;
 
-let MISC0 = 8;
-let MISC1 = 9;
-let MISC2 = 10;
+let MISC0 = 7;
+let MISC1 = 8;
+let MISC2 = 9;
 
 let WALL = 98;
 let EMPTY = 99;
@@ -26,11 +25,11 @@ let DOWN = 3;
 let canvas = document.getElementsByTagName('canvas')[0];
 let ctx = canvas.getContext('2d');
 
-let map = new Array(144).fill(EMPTY);
+let map = [];
 
 let colors = [ '#0FF', '#F61677', '#FFF', '#0F0' ];
 
-let spriteSheet = '00011001000110010011110101000101010101100111010101100100111011100000000000110000101101111011011100000000111111110000000001000010111111111000000110111101101001011011110110111001101111011011110111111111100000011000000110000001100000011000000110000001100000010000000000000000011000101011110100010100000110000000000000000000000000000000000000011010000110100000001000010111001010100110100000100100001111010001100100000010001110010111010101100110111001010001100000100010001110110001101100101010011011000110101011101010000000000010000000110000011100000111000001110000011111001111111100000000000000000001000000111000011011000111011011111011111111110000000000000000001111000001100000011000000110000011110001111110'.split("");
+let spriteSheet = '0001100100011001001111010100010101010110011101010110010011101110000000000011000010110111101101110000000011111111000000000100001011111111100000011011110110100101101111011011100110111101101111010000000000000000011000101011110100010100000110000000000000000000000000000000000000011010000110100000001000010111001010100110100000100100001111010001100100000010001110010111010101100110111001010001100000100010001110110001101100101010011011000110101011101010000000000010000000110000011100000111000001110000011111001111111100000000000000000001000000111000011011000111011011111011111111110000000000000000001111000001100000011000000110000011110001111110'.split("");
 
 let size = 12;
 let base = 8;
@@ -50,23 +49,9 @@ let mobd = [
     { a: 2, h: 4 }
 ]
 
-let levels = [
-    { r: MOB0, m: 3 },
-    { r: MOB0, m: 3 },
-    { r: MOB0, m: 3 },
-    { r: MOB1, m: 2 },
-    { r: MOB1, m: 2 },
-    { r: MOB1, m: 3 },
-    { r: MOB2, m: 3 },
-    { r: MOB2, m: 4 },
-    { r: MOB2, m: 5 },
-    { r: MOB2, m: 3 },
-    { r: MOB3, m: 3 },
-    { r: MOB1, m: 3 },
-    { r: MOB1, m: 4 },
-    { r: MOB2, m: 5 },
-    { r: MOB3, m: 5 },
-]
+// let levels = "333-333-343-442-462-344-453-553-454-553-663-364-336-555-665";
+let levels = "333442353452462344453553454553663364336555665".split("").map(e => Number(e));
+let levelL = 15;
 
 let currentRoom;
 
@@ -124,16 +109,15 @@ let player = {
             operateMobs();
         } else if (map[r * size + c] == CARGO) {
             if (d == RIGHT) {
-                // console.log("SOLUNDASIN")
                 if (map[r * size + c + 1] == EMPTY || map[r * size + c + 1] == DOOR0) {
                     if (map[r * size + c + 1] == DOOR0) {
 
-                        if (++currentRoom > levels.length - 1) {
+                        if (++currentRoom > levelL - 1) {
                             gameOver = true;          
                         } else {
                             locked = true;
                             logs.push("next room");
-                            setTimeout(() => createRoom(currentRoom), 250);
+                            setTimeout(() => createRoom(currentRoom), 200);
                         }
                     }
                     
@@ -144,7 +128,6 @@ let player = {
             }
             
             if (d == LEFT) {
-                // console.log("SAĞINDASIN")
                 if (map[r * size + c - 1] == EMPTY) {
                     set(c - 1, r, cargo, CARGO);
                     set(c, r, player, PLAYER);
@@ -153,7 +136,6 @@ let player = {
             }
             
             if (d == UP) {
-                // console.log("ALTINDASIN")
                 if (map[(r - 1) * size + c] == EMPTY) {
                     set(c, r - 1, cargo, CARGO);
                     set(c, r, player, PLAYER);
@@ -162,7 +144,6 @@ let player = {
             }
             
             if (d == DOWN) {
-                // console.log("ÜSTÜNDESİN")
                 if (map[(r + 1) * size + c] == EMPTY) {
                     set(c, r + 1, cargo, CARGO);
                     set(c, r, player, PLAYER);

@@ -1,9 +1,3 @@
-// window.addEventListener('keydown', e => {
-//     if (!e.repeat) {
-//         console.log('fire');
-//     }
-// });
-
 window.onkeydown = e => {
     if (!e.repeat && !locked) {
         if (e.keyCode == 69) {
@@ -14,18 +8,13 @@ window.onkeydown = e => {
             }
         }
 
-        //right
-        /*|| e.keyCode == 68*/
         if (e.keyCode == 39) {
             player.m(player.x + 1, player.y, RIGHT);
-        } else if (e.keyCode == 37 /*|| e.keyCode == 65*/) {
-            //left
+        } else if (e.keyCode == 37) {
             player.m(player.x - 1, player.y, LEFT);
-        } else if (e.keyCode == 38 /*|| e.keyCode == 87*/) {
-            //up
+        } else if (e.keyCode == 38) {
             player.m(player.x, player.y - 1, UP);
-        } else if (e.keyCode == 40 /*|| e.keyCode == 83*/) {
-            //down
+        } else if (e.keyCode == 40) {
             player.m(player.x, player.y + 1, DOWN);
         }
     }
