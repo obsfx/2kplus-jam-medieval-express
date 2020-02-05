@@ -64,12 +64,21 @@ let loop = () => {
         logs.map((e, i, arr) => ctx.fillText(arr[arr.length - 1 - i], (size + 1) * base * scale, (i + 1) * base * scale))
         if (logs.length > 20) logs.shift();
     } else {
-        ctx.fillStyle = '#FF0';
-        if (player.d) ctx.fillText("You died for the gods... for... transportation gods...", base * scale, base * scale);
-        ctx.fillText("Medival Express / 2kjplusjam / twitter github @obsfx", base * scale, 2 * base * scale);
-        let t = (initial) ? "Press E to start the game" : "Thanks for playing! Press E to play again";
-        ctx.fillText(t, base * scale, 3 * base * scale);
+        let list = [];
+        list.push("Medival Express / 2kplus / twitter github @obsfx");
         
+        if (player.d) list.push("You died for the gods.. for.. transportation gods.");
+        else if (!initial) list.push("You delivered the package!");
+        
+        if (!initial) list.push("Thanks for playing!");
+
+        // if (player.d) ctx.fillText("You died for the gods.. for.. transportation gods.", base * scale, base * scale);
+        // else if (!initial) ctx.fillText("You delivered the package!", base * scale, base * scale);
+        // ctx.fillText("Medival Express / 2kplus / twitter github @obsfx", base * scale, 2 * base * scale);
+        list.push("Press E to start the game");
+
+        ctx.fillStyle = '#FF0';
+        list.map((e, i) => ctx.fillText(e, base * scale, (i + 1) * base * scale));
     }
 }
 

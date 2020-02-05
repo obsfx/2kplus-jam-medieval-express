@@ -7,13 +7,13 @@ let createRoom = level => {
     let miscc = rand(3, 6);
     for (let i = 0; i < miscc; i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
-        map[randPos.y * size + randPos.x] = rand(MISC0, MISC2);
+        map[randPos.y * size + randPos.x] = rand(MISC0, MISC2 + 1);
     }
 
     let mobc = rand(levels[currentRoom * 3 + 2], levels[currentRoom * 3 + 2] + 2);
     for (let i = 0; i < mobc; i++) {
         let randPos = pos.splice(rand(0, pos.length), 1)[0];
-        let rmob = rand(levels[currentRoom * 3], levels[currentRoom * 3 + 1]);
+        let rmob = rand(levels[currentRoom * 3], levels[currentRoom * 3 + 1] + 1);
         map[randPos.y * size + randPos.x] = rmob;
         mobs[mobs.length] = {
             i: mobs.length,
