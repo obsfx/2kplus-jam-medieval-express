@@ -65,16 +65,13 @@ let loop = () => {
         if (logs.length > 20) logs.shift();
     } else {
         let list = [];
-        list.push("Medival Express / 2kplus / twitter github @obsfx");
+        list.push("Medieval Express / 2kplus / twitter github @obsfx");
         
         if (player.d) list.push("You died for the gods.. for.. transportation gods.");
         else if (!initial) list.push("You delivered the package!");
         
         if (!initial) list.push("Thanks for playing!");
 
-        // if (player.d) ctx.fillText("You died for the gods.. for.. transportation gods.", base * scale, base * scale);
-        // else if (!initial) ctx.fillText("You delivered the package!", base * scale, base * scale);
-        // ctx.fillText("Medival Express / 2kplus / twitter github @obsfx", base * scale, 2 * base * scale);
         list.push("Press E to start the game");
 
         ctx.fillStyle = '#FF0';
