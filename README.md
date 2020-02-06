@@ -6,5 +6,4 @@
 
 Medieval Express is a turn based game which was created in `4 days` for `2k plus game jam`.
 
-Play and see additional information at itch.io page: https://obsfx.itch.io/medieval-express
-
+If you want to play or see more information about the game, visit the itch.io page: https://obsfx.itch.io/medieval-express
